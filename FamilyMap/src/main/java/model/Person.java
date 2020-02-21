@@ -1,19 +1,29 @@
 package model;
 
 public class Person {
-    private String personID = null;
-    private String userName = null;
-    private String firstName = null;
-    private String lastName = null;
-    private String gender = null;
-    private String fatherID = null;
-    private String motherID = null;
-    private String spouseID = null;
+    private String personID;
+    private String userName;
+    private String firstName;
+    private String lastName;
+    private String gender;
+    private String fatherID;
+    private String motherID;
+    private String spouseID;
 
     /**
-     * Empty constructor
+     * Set all private fields
      */
-    public Person() { }
+    public Person(String personID, String userName, String firstName, String lastName,
+                  String gender, String fatherID, String motherID, String spouseID) {
+        this.personID = personID;
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.fatherID = fatherID;
+        this.motherID = motherID;
+        this.spouseID = spouseID;
+    }
 
     public String getPersonID() {
         return personID;
@@ -77,5 +87,29 @@ public class Person {
 
     public void setSpouseID(String spouseID) {
         this.spouseID = spouseID;
+    }
+
+    /**
+     * Check equality
+     * @param o Object to compare
+     * @return if o is equal to this person
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof Person) {
+            Person oPerson = (Person) o;
+            return oPerson.getPersonID().equals(getPersonID()) &&
+                    oPerson.getUserName().equals(getUserName()) &&
+                    oPerson.getFirstName().equals(getFirstName()) &&
+                    oPerson.getLastName().equals(getLastName()) &&
+                    oPerson.getGender().equals(getGender()) &&
+                    oPerson.getFatherID().equals(getFatherID()) &&
+                    oPerson.getMotherID().equals(getMotherID()) &&
+                    oPerson.getSpouseID().equals(getSpouseID());
+        } else {
+            return false;
+        }
     }
 }

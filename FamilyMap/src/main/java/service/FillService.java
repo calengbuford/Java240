@@ -1,11 +1,15 @@
 package service;
 
+import dao.Database;
 import dao.UserDao;
 import request.FillRequest;
 import response.FillResponse;
 
+import java.sql.Connection;
+
 public class FillService {
-    UserDao userDao = null;
+    private UserDao userDao;
+    private Database db;
 
     /**
      * Empty constructor
@@ -24,17 +28,30 @@ public class FillService {
      * @param userName the userName for the user to be filled
      * @param generations the number of generations to fill
      * @return FillResponse object as response from fill
+     * @throws Exception
      */
-    public FillResponse fill(FillRequest request, String userName, int generations) {
+    public FillResponse fill(FillRequest request, String userName, int generations) throws Exception {
         // Check if any information is already associated with userName
-        userDao = new UserDao();
-        if (userDao.isValidUser(userName)) {
-            userDao.deleteUser(userName);
+        try {
+            // Connect and make a new Dao
+            db = new Database();
+            Connection conn = db.openConnection();
+
+            userDao = new UserDao(conn);
+            if (userDao.isValidUser(userName)) {
+                userDao.deleteUser(userName);
+                return null;
+            }
+
+            FillResponse response = new FillResponse();
+
+            db.closeConnection(true);
+            return response;
+        }
+        catch (Exception e) {
+            System.out.println("Internal Server Error\n" + e);
+            db.closeConnection(false);
             return null;
         }
-
-        FillResponse response = new FillResponse();
-
-        return response;
     }
 }

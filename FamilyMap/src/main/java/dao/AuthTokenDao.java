@@ -20,7 +20,7 @@ public class AuthTokenDao {
      * Get an AuthToken from the database
      * @param userName the userName associated with the AuthToken
      * @param password the password associated with the AuthToken
-     * @return
+     * @return the AuthToken created
      */
     public AuthToken getAuthToken(String userName, String password) {
         return null;

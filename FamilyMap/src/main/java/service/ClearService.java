@@ -1,17 +1,17 @@
 package service;
 
-import dao.AuthTokenDao;
-import dao.EventDao;
-import dao.PersonDao;
-import dao.UserDao;
+import dao.*;
 import request.ClearRequest;
 import response.ClearResponse;
 
+import java.sql.Connection;
+
 public class ClearService {
-    private AuthTokenDao authTokenDao = null;
-    private EventDao eventDao = null;
-    private PersonDao personDao = null;
-    private UserDao userDao = null;
+    private AuthTokenDao authTokenDao;
+    private EventDao eventDao;
+    private PersonDao personDao;
+    private UserDao userDao;
+    private Database db;
 
     /**
      * Empty constructor
@@ -22,23 +22,37 @@ public class ClearService {
     /**
      * Take a ClearRequest, delete ALL data from the database, including user accounts, auth tokens, and
      * generated person and event data.
-     * @return ClearResponse object as response from clear
+     * @param request the request information from the client
+     * @return ClearResponse object as response
+     * @throws Exception
      */
-    public ClearResponse clear(ClearRequest request) {
-        authTokenDao = new AuthTokenDao();
-        eventDao = new EventDao();
-        personDao = new PersonDao();
-        userDao = new UserDao();
+    public ClearResponse clear(ClearRequest request) throws Exception {
+        try {
+            // Connect and make a new Dao
+            db = new Database();
+            Connection conn = db.openConnection();
 
-        // Delete all information from the database
-        authTokenDao.deleteAllAuthTokens();
-        eventDao.deleteAllEvents();
-        personDao.deleteAllPersons();
-        userDao.deleteAllUsers();
+            authTokenDao = new AuthTokenDao();
+            eventDao = new EventDao(conn);
+            personDao = new PersonDao(conn);
+            userDao = new UserDao(conn);
 
-        // Create the response with the AuthToken
-        ClearResponse response = new ClearResponse();
+            // Delete all information from the database
+            authTokenDao.deleteAllAuthTokens();
+            eventDao.deleteAllEvents();
+            personDao.deleteAllPersons();
+            userDao.deleteAllUsers();
 
-        return response;
+            // Create the response with the AuthToken
+            ClearResponse response = new ClearResponse();
+
+            db.closeConnection(true);
+            return response;
+        }
+        catch (Exception e) {
+            System.out.println("Internal Server Error\n" + e);
+            db.closeConnection(false);
+            return null;
+        }
     }
 }
