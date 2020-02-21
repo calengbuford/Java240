@@ -50,7 +50,7 @@ public class LoginService {
 
             // Create the response with the AuthToken
             LoginResponse response = new LoginResponse();
-            response.setAuthToken(authToken.getAuthToken());
+            response.setAuthToken(authToken.getToken());
 
             db.closeConnection(true);
             return response;

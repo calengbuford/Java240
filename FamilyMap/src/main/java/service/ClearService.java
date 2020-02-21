@@ -32,7 +32,7 @@ public class ClearService {
             db = new Database();
             Connection conn = db.openConnection();
 
-            authTokenDao = new AuthTokenDao();
+            authTokenDao = new AuthTokenDao(conn);
             eventDao = new EventDao(conn);
             personDao = new PersonDao(conn);
             userDao = new UserDao(conn);

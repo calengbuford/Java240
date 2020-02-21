@@ -1,8 +1,8 @@
 create table AuthTokens
 (
-    userName varchar(255) not null primary key,
-    password varchar(255) not null,
-    authToken varchar(255) not null
+    token varchar(255) not null primary key,
+    userName varchar(255) not null,
+    password varchar(255) not null
 );
 
 create table Events

@@ -91,8 +91,16 @@ public class EventDao {
 
     /**
      * Remove the all events from the database
+     * @throws DataAccessException
      */
-    public void deleteAllEvents() { }
+    public void deleteAllEvents() throws DataAccessException {
+        String sql = "DELETE FROM Events";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting from the database");
+        }
+    }
 
     /**
      * Update the event's table information

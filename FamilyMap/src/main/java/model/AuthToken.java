@@ -3,19 +3,39 @@ package model;
 import java.util.UUID;
 
 public class AuthToken {
+    private String token = null;
     private String userName = null;
     private String password = null;
-    private String authToken = null;
 
     /**
-     * Create an AuthToken with a userName, a password, and a random authToken string
+     * Create an AuthToken with a userName, a password, and a random token string
      * @param userName the userName associated with the AuthToken
      * @param password the password associated with the AuthToken
      */
     public AuthToken(String userName, String password) {
+        this.token = UUID.randomUUID().toString();
         this.userName = userName;
         this.password = password;
-        this.authToken = UUID.randomUUID().toString();
+    }
+
+    /**
+     * Create an AuthToken with a userName, a password, and a random token string
+     * @param userName the userName associated with the AuthToken
+     * @param password the password associated with the AuthToken
+     * @param token the token associated with the AuthToken
+     */
+    public AuthToken(String userName, String password, String token) {
+        this.token = token;
+        this.userName = userName;
+        this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getUserName() {
@@ -34,11 +54,22 @@ public class AuthToken {
         this.password = password;
     }
 
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+    /**
+     * Check equality
+     * @param o Object to compare
+     * @return if o is equal to this authToken
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof AuthToken) {
+            AuthToken oAuthToken = (AuthToken) o;
+            return oAuthToken.getUserName().equals(getUserName()) &&
+                    oAuthToken.getPassword().equals(getPassword()) &&
+                    oAuthToken.getToken().equals(getToken());
+        } else {
+            return false;
+        }
     }
 }

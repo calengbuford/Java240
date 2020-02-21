@@ -62,7 +62,7 @@ public class RegisterService {
 
             // Create the response with the AuthToken
             RegisterResponse response = new RegisterResponse();
-            response.setAuthToken(authToken.getAuthToken());
+            response.setAuthToken(authToken.getToken());
 
             db.closeConnection(true);
             return response;
