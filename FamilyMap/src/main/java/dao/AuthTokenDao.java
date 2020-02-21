@@ -45,7 +45,7 @@ public class AuthTokenDao {
     public AuthToken getAuthToken(String token) throws DataAccessException {
         AuthToken authToken;
         ResultSet rs = null;
-        String sql = "SELECT * FROM AuthToken WHERE authToken = ?;";
+        String sql = "SELECT * FROM AuthTokens WHERE token = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, token);
             rs = stmt.executeQuery();

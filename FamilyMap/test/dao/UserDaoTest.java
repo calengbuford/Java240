@@ -26,8 +26,8 @@ public class UserDaoTest {
 
     @AfterEach
     public void tearDown() throws Exception {
-        //here we can get rid of anything from our tests we don't want to affect the rest of our program
-        //lets clear the tables so that any data we entered for testing doesn't linger in our files
+        // here we can get rid of anything from our tests we don't want to affect the rest of our program
+        // lets clear the tables so that any data we entered for testing doesn't linger in our files
         db.openConnection();
         db.clearTables();
         db.closeConnection(true);
@@ -156,7 +156,6 @@ public class UserDaoTest {
 
     @Test
     public void deleteUserTablePass() throws Exception {
-        // Make sure clearAllUsers works
         // First create a User set to null. Use this to make sure what we put
         // in the database is actually there.
         User compareTest = null;

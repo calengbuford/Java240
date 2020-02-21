@@ -1,5 +1,6 @@
 package dao;
 
+import model.AuthToken;
 import model.Event;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,19 +11,16 @@ import java.sql.Connection;
 import static org.junit.jupiter.api.Assertions.*;
 
 //We will use this to test that our insert method is working and failing in the right ways
-public class EventDaoTest {
+public class AuthTokenDaoTest {
     private Database db;
-    private Event bestEvent;
+    private AuthToken bestAuthToken;
 
     @BeforeEach
     public void setUp() throws Exception {
-        //here we can set up any classes or variables we will need for the rest of our tests
-        //lets create a new database
-        db = new Database();
-        //and a new event with random data
-        bestEvent = new Event("Biking_123A", "Gale", "Gale123A",
-                10.3f, 10.3f, "Japan", "Ushiku",
-                "Biking_Around", 2016);
+        // Set up any classes or variables we will need for the rest of our tests
+        db = new Database();    // Create a new database
+        // Create a new authToken with random data
+        bestAuthToken = new AuthToken("5555", "Snow", "1234");
     }
 
     @AfterEach
@@ -35,21 +33,21 @@ public class EventDaoTest {
     }
 
     @Test
-    public void createEventPass() throws Exception {
+    public void createAuthTokenPass() throws Exception {
         //We want to make sure insert works
-        //First lets create an Event that we'll set to null. We'll use this to make sure what we put
+        //First lets create an AuthToken that we'll set to null. We'll use this to make sure what we put
         //in the database is actually there.
-        Event compareTest = null;
+        AuthToken compareTest = null;
 
         try {
             //Let's get our connection and make a new DAO
             Connection conn = db.openConnection();
-            EventDao eventDao = new EventDao(conn);
+            AuthTokenDao authTokenDao = new AuthTokenDao(conn);
             //While insert returns a bool we can't use that to verify that our function actually worked
             //only that it ran without causing an error
-            eventDao.createEvent(bestEvent);
-            //So lets use a find method to get the event that we just put in back out
-            compareTest = eventDao.getEvent(bestEvent.getEventID());
+            authTokenDao.createAuthToken(bestAuthToken);
+            //So lets use a find method to get the authToken that we just put in back out
+            compareTest = authTokenDao.getAuthToken(bestAuthToken.getToken());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
@@ -60,26 +58,23 @@ public class EventDaoTest {
         //Now lets make sure that what we put in is exactly the same as what we got out. If this
         //passes then we know that our insert did put something in, and that it didn't change the
         //data in any way
-        assertEquals(bestEvent, compareTest);
+        assertEquals(bestAuthToken, compareTest);
 
     }
 
     @Test
-    public void createEventFail() throws Exception {
+    public void createAuthTokenFail() throws Exception {
         //lets do this test again but this time lets try to make it fail
 
-        // NOTE: The correct way to test for an exception in Junit 5 is to use an assertThrows
-        // with a lambda function. However, lambda functions are beyond the scope of this class
-        // so we are doing it another way.
         boolean didItWork = true;
         try {
             Connection conn = db.openConnection();
-            EventDao eventDao = new EventDao(conn);
+            AuthTokenDao authTokenDao = new AuthTokenDao(conn);
             //if we call the method the first time it will insert it successfully
-            eventDao.createEvent(bestEvent);
-            //but our sql table is set up so that "eventID" must be unique. So trying to insert it
+            authTokenDao.createAuthToken(bestAuthToken);
+            //but our sql table is set up so that "token" must be unique. So trying to insert it
             //again will cause the method to throw an exception
-            eventDao.createEvent(bestEvent);
+            authTokenDao.createAuthToken(bestAuthToken);
             db.closeConnection(true);
         } catch (DataAccessException e) {
             //If we catch an exception we will end up in here, where we can change our boolean to
@@ -94,13 +89,13 @@ public class EventDaoTest {
         //rolled back. So for added security lets make one more quick check using our find function
         //to make sure that our event is not in the database
         //Set our compareTest to an actual event
-        Event compareTest = bestEvent;
+        AuthToken compareTest = bestAuthToken;
         try {
             Connection conn = db.openConnection();
-            EventDao eventDao = new EventDao(conn);
-            //and then get something back from our find. If the event is not in the database we
+            AuthTokenDao authTokenDao = new AuthTokenDao(conn);
+            //and then get something back from our find. If the authToken is not in the database we
             //should have just changed our compareTest to a null object
-            compareTest = eventDao.getEvent(bestEvent.getEventID());
+            compareTest = authTokenDao.getAuthToken(bestAuthToken.getToken());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
@@ -111,19 +106,19 @@ public class EventDaoTest {
     }
 
     @Test
-    public void getEventPass() throws Exception {
-        // Make sure getEvent works
-        // First create a Event set to null. Use this to make sure what we put
+    public void getAuthTokenPass() throws Exception {
+        // Make sure getAuthToken works
+        // First create a AuthToken set to null. Use this to make sure what we put
         // in the database is actually there.
-        Event compareTest = null;
+        AuthToken compareTest = null;
 
         try {
             // Get our connection and make a new Dao
             Connection conn = db.openConnection();
-            EventDao eventDao = new EventDao(conn);
-            eventDao.createEvent(bestEvent);
+            AuthTokenDao authTokenDao = new AuthTokenDao(conn);
+            authTokenDao.createAuthToken(bestAuthToken);
 
-            compareTest = eventDao.getEvent(bestEvent.getEventID());
+            compareTest = authTokenDao.getAuthToken(bestAuthToken.getToken());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
@@ -132,22 +127,22 @@ public class EventDaoTest {
         // else something was put into our database, since we cleared it in the beginning
         assertNotNull(compareTest);
         // Now lets make sure that what we put in is exactly the same as what we got out. If this
-        // passes then we know that our getEvent did put something in, and that it didn't change the
+        // passes then we know that our getAuthToken did put something in, and that it didn't change the
         // data in any way
-        assertEquals(bestEvent, compareTest);
+        assertEquals(bestAuthToken, compareTest);
     }
 
     @Test
-    public void getEventFail() throws Exception {
+    public void getAuthTokenFail() throws Exception {
         // Test again but try to make it fail
 
-        Event event = null;
+        AuthToken authToken = null;
         try {
             Connection conn = db.openConnection();
-            EventDao eventDao = new EventDao(conn);
+            AuthTokenDao authTokenDao = new AuthTokenDao(conn);
 
-            // Attempt to retrieve an event that does not exist, since the table is empty
-            event = eventDao.getEvent("1234");
+            // Attempt to retrieve an authToken that does not exist, since the table is empty
+            authToken = authTokenDao.getAuthToken("1234");
 
             db.closeConnection(true);
         } catch (DataAccessException e) {
@@ -155,25 +150,25 @@ public class EventDaoTest {
             // false to show that our function failed to perform correctly
             db.closeConnection(false);
         }
-        // Ensure no event was returned
-        assertNull(event);
+        // Ensure no authToken was returned
+        assertNull(authToken);
     }
 
     @Test
-    public void deletePersonTablePass() throws Exception {
-        // First create an Event set to null. Use this to make sure what we put
+    public void deleteAuthTokenTablePass() throws Exception {
+        // First create an AuthToken set to null. Use this to make sure what we put
         // in the database is actually there.
-        Event compareTest = null;
+        AuthToken compareTest = null;
 
         try {
             // Get our connection and make a new Dao
             Connection conn = db.openConnection();
-            EventDao eventDao = new EventDao(conn);
-            eventDao.createEvent(bestEvent);
+            AuthTokenDao authTokenDao = new AuthTokenDao(conn);
+            authTokenDao.createAuthToken(bestAuthToken);
 
-            // Delete all rows of the table, then try to get an event from the table
-            eventDao.deleteAllEvents();
-            compareTest = eventDao.getEvent(bestEvent.getEventID());
+            // Delete all rows of the table, then try to get an authToken from the table
+            authTokenDao.deleteAllAuthTokens();
+            compareTest = authTokenDao.getAuthToken(bestAuthToken.getToken());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);

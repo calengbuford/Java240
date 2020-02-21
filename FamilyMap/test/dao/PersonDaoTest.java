@@ -25,8 +25,8 @@ public class PersonDaoTest {
 
     @AfterEach
     public void tearDown() throws Exception {
-        //here we can get rid of anything from our tests we don't want to affect the rest of our program
-        //lets clear the tables so that any data we entered for testing doesn't linger in our files
+        // here we can get rid of anything from our tests we don't want to affect the rest of our program
+        // lets clear the tables so that any data we entered for testing doesn't linger in our files
         db.openConnection();
         db.clearTables();
         db.closeConnection(true);
@@ -140,7 +140,7 @@ public class PersonDaoTest {
             Connection conn = db.openConnection();
             PersonDao personDao = new PersonDao(conn);
 
-            // Attempt to retrieve a user that does not exist, since the table is empty
+            // Attempt to retrieve a person that does not exist, since the table is empty
             person = personDao.getPerson("1234");
 
             db.closeConnection(true);
@@ -155,7 +155,6 @@ public class PersonDaoTest {
 
     @Test
     public void deletePersonTablePass() throws Exception {
-        // Make sure clearAllPersons works
         // First create a Person set to null. Use this to make sure what we put
         // in the database is actually there.
         Person compareTest = null;

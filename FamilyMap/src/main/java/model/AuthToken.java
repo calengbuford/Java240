@@ -20,11 +20,11 @@ public class AuthToken {
 
     /**
      * Create an AuthToken with a userName, a password, and a random token string
+     * @param token the token associated with the AuthToken
      * @param userName the userName associated with the AuthToken
      * @param password the password associated with the AuthToken
-     * @param token the token associated with the AuthToken
      */
-    public AuthToken(String userName, String password, String token) {
+    public AuthToken(String token, String userName, String password) {
         this.token = token;
         this.userName = userName;
         this.password = password;
