@@ -5,9 +5,7 @@ import dao.UserDao;
 import model.AuthToken;
 import model.User;
 import request.RegisterRequest;
-import request.FillRequest;
 import response.RegisterResponse;
-import service.FillService;
 
 import java.sql.Connection;
 import java.util.UUID;
@@ -17,11 +15,13 @@ public class RegisterService {
     private AuthToken authToken;
     private UserDao userDao;
     private Database db;
+    private RegisterResponse response;
 
     /**
      * Empty constructor
      */
     public RegisterService() {
+        response = new RegisterResponse();
     }
 
     /**
@@ -47,29 +47,35 @@ public class RegisterService {
             user.setGender(request.getGender());
             user.setPersonID(UUID.randomUUID().toString());
 
+            userDao = new UserDao(conn);
+            if (userDao.isValidUser(user.getUserName())) {
+                userDao.deleteUser(user.getUserName());
+                throw new Exception("User already exists in database");
+            }
+
             // Fill the user with random information
-            FillRequest fillRequest = new FillRequest();
             FillService fillService = new FillService();
             int generations = 4;
-            fillService.fill(fillRequest, user.getUserName(), generations);
+            fillService.fill(user.getUserName(), generations);
 
             // Add the user the database
-            userDao = new UserDao(conn);
             userDao.createUser(user);
 
             // Create a new AuthToken for the login session
             authToken = new AuthToken(user.getUserName(), user.getPassword());
 
-            // Create the response with the AuthToken
-            RegisterResponse response = new RegisterResponse();
-            response.setAuthToken(authToken.getToken());
-
             db.closeConnection(true);
+            response.setAuthToken(authToken.getToken());
+            response.setUserName(user.getUserName());
+            response.setPersonID(user.getPersonID());
+            response.setSuccess(true);
             return response;
         }
         catch (Exception e) {
             System.out.println("Internal Server Error\n" + e);
             db.closeConnection(false);
+            response.setMessage(e.toString());
+            response.setSuccess(false);
             return null;
         }
     }

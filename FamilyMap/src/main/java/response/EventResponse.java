@@ -1,13 +1,24 @@
 package response;
 
-public class FillResponse {
-    private Boolean success;
+import model.Event;
+
+public class EventResponse {
+    private Event[] data;
+    private Boolean success = null;
     private String message;
 
     /**
      * Empty constructor
      */
-    public FillResponse() { }
+    public EventResponse() { }
+
+    public Event[] getData() {
+        return data;
+    }
+
+    public void setData(Event[] data) {
+        this.data = data;
+    }
 
     public Boolean getSuccess() {
         return success;

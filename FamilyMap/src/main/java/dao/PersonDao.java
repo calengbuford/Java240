@@ -79,6 +79,18 @@ public class PersonDao {
     }
 
 
+    /**
+     * Recursively get all family members of user with userName
+     * @param userName
+     * @return Person array of all people in the userName's family
+     * @throws DataAccessException
+     */
+    public Person[] getPersonFamily(String userName) throws DataAccessException {
+
+
+
+        return null;
+    }
 
     /**
      * Remove the person from the database

@@ -84,6 +84,19 @@ public class EventDao {
     }
 
     /**
+     * Recursively get all events of user with userName
+     * @param userName
+     * @return Event array of all events of the user
+     * @throws DataAccessException
+     */
+    public Event[] getPersonEvents(String userName) throws DataAccessException {
+
+
+
+        return null;
+    }
+
+    /**
      * Remove the event from the database
      * @param eventID the ID of the event to delete
      */

@@ -38,18 +38,36 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/sqlite-jdbc-3.7.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/gson-2.6.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/jars/json-20160212.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/jars/sqlite-jdbc-3.7.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="jar://$USER_HOME$/Desktop/jars/sqlite-jdbc-3.7.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/sqlite-jdbc-3.7.2.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/json-20160212.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/junit-jupiter-5.5.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -58,7 +76,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/gson-2.6.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/junit-jupiter-api-5.5.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -67,7 +85,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/JUnit5/junit-jupiter-5.5.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/junit-jupiter-engine-5.5.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -76,7 +94,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/JUnit5/junit-jupiter-api-5.5.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/junit-jupiter-params-5.5.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -85,7 +103,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/JUnit5/junit-jupiter-engine-5.5.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/apiguardian-api-1.1.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -94,7 +112,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/JUnit5/junit-jupiter-params-5.5.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/junit-platform-commons-1.5.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -103,7 +121,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/JUnit5/apiguardian-api-1.1.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/opentest4j-1.2.0.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -112,25 +130,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/JUnit5/junit-platform-commons-1.5.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/JUnit5/opentest4j-1.2.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Desktop/jars/JUnit5/junit-platform-engine-1.5.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/jars/junit-platform-engine-1.5.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

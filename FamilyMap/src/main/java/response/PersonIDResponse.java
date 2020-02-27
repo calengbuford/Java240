@@ -1,13 +1,24 @@
 package response;
 
-public class FillResponse {
-    private Boolean success;
+import model.Person;
+
+public class PersonIDResponse {
+    private Person person;
+    private Boolean success = null;
     private String message;
 
     /**
      * Empty constructor
      */
-    public FillResponse() { }
+    public PersonIDResponse() { }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
     public Boolean getSuccess() {
         return success;

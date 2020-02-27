@@ -15,11 +15,13 @@ public class LoginService {
     private AuthToken authToken;
     private UserDao userDao;
     private Database db;
+    private LoginResponse response;
 
     /**
      * Empty constructor
      */
     public LoginService() {
+        response = new LoginResponse();
     }
 
     /**
@@ -29,7 +31,6 @@ public class LoginService {
      * @throws Exception
      */
     public LoginResponse login(LoginRequest request) throws Exception {
-        // Check if the user is in the database
         try {
             // Connect and make a new Dao
             db = new Database();
@@ -48,16 +49,19 @@ public class LoginService {
             // Create a new AuthToken for the login session
             authToken = new AuthToken(user.getUserName(), user.getPassword());
 
-            // Create the response with the AuthToken
-            LoginResponse response = new LoginResponse();
-            response.setAuthToken(authToken.getToken());
-
+            // Add AuthToken to the response
             db.closeConnection(true);
+            response.setAuthToken(authToken.getToken());
+            response.setUserName(user.getUserName());
+            response.setPersonID(user.getPersonID());
+            response.setSuccess(true);
             return response;
         }
         catch (Exception e) {
             System.out.println("Internal Server Error\n" + e);
             db.closeConnection(false);
+            response.setMessage(e.toString());
+            response.setSuccess(false);
             return null;
         }
     }
