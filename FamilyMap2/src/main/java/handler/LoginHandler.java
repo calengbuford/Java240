@@ -2,7 +2,12 @@ package handler;
 
 import java.io.*;
 import java.net.*;
+import com.google.gson.Gson;
 import com.sun.net.httpserver.*;
+import dao.DataAccessException;
+import request.LoginRequest;
+import response.LoginResponse;
+import service.LoginService;
 
 public class LoginHandler implements HttpHandler {
 
@@ -13,6 +18,10 @@ public class LoginHandler implements HttpHandler {
      */
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        LoginRequest request;
+        LoginResponse response;
+        LoginService service = new LoginService();
+        Gson gson = new Gson();
         boolean success = false;
 
         try {
@@ -22,25 +31,28 @@ public class LoginHandler implements HttpHandler {
                 // Get the HTTP request headers
                 Headers reqHeaders = exchange.getRequestHeaders();
 
-                String respData = "";
+                // Extract the JSON string from the HTTP request body
 
+                // Get the request body input stream
+                InputStream reqBody = exchange.getRequestBody();
+                // Read JSON string from the input stream
+                String reqJson = readString(reqBody);
 
-                // TODO: everything
+                // Display/log the request JSON data
+                System.out.println(reqJson);
 
+                // Call the login service and get the response
+                request = gson.fromJson(reqJson, LoginRequest.class);
+                response = service.login(request);
 
-                // Start sending the HTTP response to the client, starting with
-                // the status code and any defined headers.
+                // Convert the response to a byte array
+                String respJson = gson.toJson(response);
+                byte[] array = respJson.getBytes();
+
+                // Set the header and write the response
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-
-                // Now that the status code and headers have been sent to the client,
-                // next we send the JSON data in the HTTP response body.
-
-                // Get the response body output stream.
                 OutputStream respBody = exchange.getResponseBody();
-                // Write the JSON string to the output stream.
-                writeString(respData, respBody);
-                // Close the output stream.  This is how Java knows we are done
-                // sending data and the response is complete/
+                respBody.write(array);
                 respBody.close();
 
                 success = true;
@@ -70,12 +82,20 @@ public class LoginHandler implements HttpHandler {
         }
     }
 
-    /*
-        The writeString method shows how to write a String to an OutputStream.
-    */
-    private void writeString(String str, OutputStream os) throws IOException {
-        OutputStreamWriter sw = new OutputStreamWriter(os);
-        sw.write(str);
-        sw.flush();
+    /**
+     * The readString method shows how to read a String from an InputStream
+     * @param is InputStream
+     * @return string
+     * @throws IOException
+     */
+    private String readString(InputStream is) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        InputStreamReader sr = new InputStreamReader(is);
+        char[] buf = new char[1024];
+        int len;
+        while ((len = sr.read(buf)) > 0) {
+            sb.append(buf, 0, len);
+        }
+        return sb.toString();
     }
 }

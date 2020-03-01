@@ -29,9 +29,8 @@ public class RegisterService {
      * user, log the user in, and return a response with an AuthToken.
      * @param request the request information from the client
      * @return RegisterResponse object as response
-     * @throws Exception
      */
-    public RegisterResponse register(RegisterRequest request) throws Exception {
+    public RegisterResponse register(RegisterRequest request) {
         try {
             // Connect and make a new Dao
             db = new Database();
@@ -73,7 +72,12 @@ public class RegisterService {
         }
         catch (Exception e) {
             System.out.println("Internal server.Server Error\n" + e);
-            db.closeConnection(false);
+            try {
+                db.closeConnection(false);
+            }
+            catch (Exception error) {
+                System.out.println(error);
+            }
             response.setMessage(e.toString());
             response.setSuccess(false);
             return null;

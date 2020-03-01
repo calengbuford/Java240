@@ -1,6 +1,7 @@
 package service;
 
 import dao.*;
+import request.ClearRequest;
 import response.ClearResponse;
 
 import java.sql.Connection;
@@ -24,9 +25,8 @@ public class ClearService {
      * Delete ALL data from the database, including user accounts, auth tokens, and
      * generated person and event data.
      * @return ClearResponse object as response
-     * @throws Exception
      */
-    public ClearResponse clear() throws Exception {
+    public ClearResponse clear(ClearRequest request) {
         try {
             // Connect and make a new Dao
             db = new Database();
@@ -50,7 +50,12 @@ public class ClearService {
         }
         catch (Exception e) {
             System.out.println("Internal server.Server Error\n" + e);
-            db.closeConnection(false);
+            try {
+                db.closeConnection(false);
+            }
+            catch (Exception error) {
+                System.out.println(error);
+            }
             response.setMessage(e.toString());
             response.setSuccess(false);
             return null;

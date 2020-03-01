@@ -31,9 +31,8 @@ public class LoadService {
      * posted user, person, and event data into the database.
      * @param request the request information from the client
      * @return LoadResponse object as response
-     * @throws Exception
      */
-    public LoadResponse load(LoadRequest request) throws Exception {
+    public LoadResponse load(LoadRequest request) {
         try {
             // Connect and make a new Dao
             db = new Database();
@@ -75,7 +74,12 @@ public class LoadService {
         }
         catch (Exception e) {
             System.out.println("Internal server.Server Error\n" + e);
-            db.closeConnection(false);
+            try {
+                db.closeConnection(false);
+            }
+            catch (Exception error) {
+                System.out.println(error);
+            }
             response.setMessage(e.toString());
             response.setSuccess(false);
             return response;

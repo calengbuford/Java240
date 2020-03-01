@@ -27,9 +27,8 @@ public class LoginService {
      * Take a LoginRequest, log in the user and return an AuthToken.
      * @param request the request information from the client
      * @return LoginResponse object as response
-     * @throws Exception
      */
-    public LoginResponse login(LoginRequest request) throws Exception {
+    public LoginResponse login(LoginRequest request) {
         try {
             // Connect and make a new Dao
             db = new Database();
@@ -58,7 +57,12 @@ public class LoginService {
         }
         catch (Exception e) {
             System.out.println("Internal server.Server Error\n" + e);
-            db.closeConnection(false);
+            try {
+                db.closeConnection(false);
+            }
+            catch (Exception error) {
+                System.out.println(error);
+            }
             response.setMessage(e.toString());
             response.setSuccess(false);
             return null;
