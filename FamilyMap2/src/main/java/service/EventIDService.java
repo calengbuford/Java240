@@ -51,7 +51,7 @@ public class EventIDService {
             return response;
         }
         catch (Exception e) {
-            System.out.println("Internal Server Error\n" + e);
+            System.out.println("Internal server.Server Error\n" + e);
             db.closeConnection(false);
             response.setMessage(e.toString());
             response.setSuccess(false);

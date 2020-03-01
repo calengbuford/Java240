@@ -113,7 +113,7 @@
 //            Assertions.assertNotEquals(EMPTY_STRING, registerResult.e(), "personID was empty string, expected non-empty string containing the personID of the user's generated Person object");
 //            Assertions.assertNotNull(registerResult.d(), "userName was null OR its variable name did not match that of the expected JSon (see API)");
 //            Assertions.assertNotEquals(EMPTY_STRING, registerResult.d(), "userName was empty string, expected userName passed in with request");
-//            Assertions.assertEquals(SHEILA.g(), registerResult.d(), "userName from Server does not match the requested userName");
+//            Assertions.assertEquals(SHEILA.g(), registerResult.d(), "userName from server.Server does not match the requested userName");
 //        } catch (client.Client.ServerConnectionException serverConnectionException) {
 //            Assertions.fail(serverConnectionException.getMessage());
 //        }
@@ -153,7 +153,7 @@
 //            Assertions.assertEquals(registerResult.e(), loginResult.e(), "personID does not match the personID that was returned from register");
 //            Assertions.assertNotNull(loginResult.d(), "userName was null OR its variable name did not match that of the expected JSon (see API)");
 //            Assertions.assertNotEquals(EMPTY_STRING, loginResult.d(), "userName was empty string, expected userName passed in with request");
-//            Assertions.assertEquals(SHEILA.g(), loginResult.d(), "userName from Server does not match the requested userName ");
+//            Assertions.assertEquals(SHEILA.g(), loginResult.d(), "userName from server.Server does not match the requested userName ");
 //        } catch (client.Client.ServerConnectionException serverConnectionException) {
 //            Assertions.fail(serverConnectionException.getMessage());
 //        }

@@ -29,7 +29,7 @@ public class Database {
         try {
             //The Structure for this Connection is driver:language:path
             //The path assumes you start in the root of your project unless given a non-relative path
-            final String CONNECTION_URL = "jdbc:sqlite:FamilyMap.sqlite";
+            final String CONNECTION_URL = "jdbc:sqlite:db/FamilyMap.sqlite";
 
             // Open a database connection to the file given in the path
             conn = DriverManager.getConnection(CONNECTION_URL);
