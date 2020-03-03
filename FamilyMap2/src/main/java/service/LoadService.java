@@ -16,14 +16,18 @@ public class LoadService {
     private UserDao userDao;
     private Database db;
     private LoadResponse response;
+    private int numUsersAdded;
     private int numPersonsAdded;
     private int numEventsAdded;
 
     /**
-     * Empty constructor
+     * Constructor
      */
     public LoadService() {
         response = new LoadResponse();
+        numUsersAdded = 0;
+        numPersonsAdded = 0;
+        numEventsAdded = 0;
     }
 
     /**
@@ -54,31 +58,34 @@ public class LoadService {
             Event[] events = request.getEvents();
             for (Event event : events) {
                 eventDao.createEvent(event);
+                numEventsAdded++;
             }
             // Add the persons to the database
             Person[] persons = request.getPersons();
             for (Person person : persons) {
                 personDao.createPerson(person);
+                numPersonsAdded++;
             }
             // Add the users to the database
             User[] users = request.getUsers();
             for (User user : users) {
                 userDao.createUser(user);
+                numUsersAdded++;
             }
 
             db.closeConnection(true);
-            response.setMessage("Successfully added " + numPersonsAdded + " persons and " +
-                    numEventsAdded + " events to the database.");
+            response.setMessage("Successfully added " + numUsersAdded + " users, " + numPersonsAdded +
+                    " persons, and " + numEventsAdded + " events to the database.");
             response.setSuccess(true);
             return response;
         }
         catch (Exception e) {
-            System.out.println("Internal server.Server Error\n" + e);
+            System.out.println(e.toString());
             try {
                 db.closeConnection(false);
             }
             catch (Exception error) {
-                System.out.println(error);
+                System.out.println(error.toString());
             }
             response.setMessage(e.toString());
             response.setSuccess(false);

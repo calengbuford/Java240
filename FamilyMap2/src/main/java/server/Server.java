@@ -67,6 +67,7 @@ public class Server {
         server.createContext("/load", new LoadHandler());
         server.createContext("/person", new PersonHandler());
         server.createContext("/event", new EventHandler());
+        server.createContext("/", new DefaultHandler());
 
         // Log message indicating that the HttpServer is about the start accepting incoming client connections.
         System.out.println("Starting server");
@@ -78,7 +79,7 @@ public class Server {
         server.start();
 
         // Log message indicating that the server has successfully started.
-        System.out.println("server.Server started");
+        System.out.println("Server started");
     }
 
     /**

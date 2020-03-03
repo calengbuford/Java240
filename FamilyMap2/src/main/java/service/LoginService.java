@@ -36,8 +36,8 @@ public class LoginService {
             userDao = new UserDao(conn);
 
             // Check if valid userName
-            if (!userDao.isValidUser(request.getUserName())) {
-                return null;
+            if (userDao.getUser(request.getUserName()) == null) {
+                throw new Exception("Invalid userName");
             }
 
             // Get the user from the database
@@ -56,16 +56,16 @@ public class LoginService {
             return response;
         }
         catch (Exception e) {
-            System.out.println("Internal server.Server Error\n" + e);
+            System.out.println(e.toString());
             try {
                 db.closeConnection(false);
             }
             catch (Exception error) {
-                System.out.println(error);
+                System.out.println(error.toString());
             }
             response.setMessage(e.toString());
             response.setSuccess(false);
-            return null;
+            return response;
         }
     }
 }

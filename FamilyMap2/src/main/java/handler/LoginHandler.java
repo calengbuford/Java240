@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.*;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.*;
-import dao.DataAccessException;
 import request.LoginRequest;
 import response.LoginResponse;
 import service.LoginService;

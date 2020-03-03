@@ -94,9 +94,17 @@ public class PersonDao {
 
     /**
      * Remove the person from the database
-     * @param personID the ID of the person to delete
+     * @param userName
      */
-    public void deletePerson(String personID) { }
+    public void deletePersonByUserName(String userName) throws DataAccessException {
+        String sql = "DELETE FROM Persons WHERE userName = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, userName);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting from the database");
+        }
+    }
 
     /**
      * Remove the all persons from the database
@@ -112,7 +120,33 @@ public class PersonDao {
     }
 
     /**
-     * Update the person's table information
+     * Update the person's parentIDs
+     * @throws DataAccessException
      */
-    public void updatePerson() { }
+    public void updatePersonParents(String personID, String motherID, String fatherID) throws DataAccessException {
+        String sql = "UPDATE PERSONS SET fatherID = ?, motherID = ? WHERE personID = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, fatherID);
+            stmt.setString(2, motherID);
+            stmt.setString(3, personID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting from the database");
+        }
+    }
+
+    /**
+     * Update the person's spouseID
+     * @throws DataAccessException
+     */
+    public void updatePersonSpouse(String personID, String spouseID) throws DataAccessException {
+        String sql = "UPDATE PERSONS SET spouseID = ? WHERE personID = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, spouseID);
+            stmt.setString(2, personID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting from the database");
+        }
+    }
 }

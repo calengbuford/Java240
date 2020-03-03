@@ -49,16 +49,16 @@ public class ClearService {
             return response;
         }
         catch (Exception e) {
-            System.out.println("Internal server.Server Error\n" + e);
+            System.out.println(e.toString());
             try {
                 db.closeConnection(false);
             }
             catch (Exception error) {
-                System.out.println(error);
+                System.out.println(error.toString());
             }
             response.setMessage(e.toString());
             response.setSuccess(false);
-            return null;
+            return response;
         }
     }
 }

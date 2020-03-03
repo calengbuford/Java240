@@ -1,10 +1,15 @@
 package service;
 
+import dao.AuthTokenDao;
 import dao.Database;
+import dao.PersonDao;
 import dao.UserDao;
 import model.AuthToken;
+import model.Person;
 import model.User;
+import request.FillRequest;
 import request.RegisterRequest;
+import response.FillResponse;
 import response.RegisterResponse;
 
 import java.sql.Connection;
@@ -14,11 +19,12 @@ public class RegisterService {
     private User user;
     private AuthToken authToken;
     private UserDao userDao;
+    private AuthTokenDao authTokenDao;
     private Database db;
     private RegisterResponse response;
 
     /**
-     * Empty constructor
+     * Constructor
      */
     public RegisterService() {
         response = new RegisterResponse();
@@ -37,33 +43,34 @@ public class RegisterService {
             Connection conn = db.openConnection();
 
             // Build a new user
-            user = new User();
-            user.setUserName(request.getUserName());
-            user.setPassword(request.getPassword());
-            user.setEmail(request.getEmail());
-            user.setFirstName(request.getFirstName());
-            user.setLastName(request.getLastName());
-            user.setGender(request.getGender());
-            user.setPersonID(UUID.randomUUID().toString());
+            user = new User(request.getUserName(), request.getPassword(), request.getEmail(),
+                    request.getFirstName(), request.getLastName(), request.getGender(), UUID.randomUUID().toString());
 
             userDao = new UserDao(conn);
-            if (userDao.isValidUser(user.getUserName())) {
-                userDao.deleteUser(user.getUserName());
+            if (userDao.getUser(user.getUserName()) != null) {
                 throw new Exception("User already exists in database");
             }
 
-            // Fill the user with random information
-            FillService fillService = new FillService();
-            int generations = 4;
-            fillService.fill(user.getUserName(), generations);
-
-            // Add the user the database
+            // Add the user to the database
             userDao.createUser(user);
 
             // Create a new AuthToken for the login session
             authToken = new AuthToken(user.getUserName(), user.getPassword());
+            authTokenDao = new AuthTokenDao(conn);
+            authTokenDao.createAuthToken(authToken);
 
             db.closeConnection(true);
+
+            // Fill the user with random information
+            FillService fillService = new FillService();
+            FillRequest fillRequest = new FillRequest();
+            int generations = 4;
+            FillResponse fillResponse = fillService.fill(fillRequest, user.getUserName(), generations);
+
+            if (!fillResponse.getSuccess()) {
+                throw new Exception(fillResponse.getMessage());
+            }
+
             response.setAuthToken(authToken.getToken());
             response.setUserName(user.getUserName());
             response.setPersonID(user.getPersonID());
@@ -71,16 +78,21 @@ public class RegisterService {
             return response;
         }
         catch (Exception e) {
-            System.out.println("Internal server.Server Error\n" + e);
+            System.out.println(e.getMessage());
             try {
                 db.closeConnection(false);
             }
             catch (Exception error) {
-                System.out.println(error);
+                System.out.println(error.getMessage());
             }
-            response.setMessage(e.toString());
+            if (e.getMessage() == null) {
+                response.setMessage("Internal Server Error");
+            }
+            else {
+                response.setMessage(e.getMessage());
+            }
             response.setSuccess(false);
-            return null;
+            return response;
         }
     }
 }

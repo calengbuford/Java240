@@ -1,5 +1,7 @@
 package model;
 
+import java.util.UUID;
+
 public class Person {
     private String personID;
     private String userName;
@@ -23,6 +25,43 @@ public class Person {
         this.fatherID = fatherID;
         this.motherID = motherID;
         this.spouseID = spouseID;
+    }
+
+    /**
+     * Set all fields, auto-filling the eventID
+     */
+    public Person(String userName, String firstName, String lastName,
+                  String gender, String fatherID, String motherID, String spouseID) {
+        this.personID = UUID.randomUUID().toString();
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.fatherID = fatherID;
+        this.motherID = motherID;
+        this.spouseID = spouseID;
+    }
+
+    /**
+     * Set all fields, auto-filling the eventID and not setting family IDs
+     */
+    public Person(String personID, String userName, String firstName, String lastName,
+                  String gender) {
+        this.personID = personID;
+        this.userName = userName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.fatherID = null;
+        this.motherID = null;
+        this.spouseID = null;
+    }
+
+    /**
+     * Constructor only sets ID
+     */
+    public Person() {
+        this.personID = UUID.randomUUID().toString();
     }
 
     public String getPersonID() {

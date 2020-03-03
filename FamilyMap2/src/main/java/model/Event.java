@@ -1,5 +1,7 @@
 package model;
 
+import java.util.UUID;
+
 public class Event {
     private String eventID;
     private String userName;
@@ -25,6 +27,29 @@ public class Event {
         this.city = city;
         this.eventType = eventType;
         this.year = year;
+    }
+
+    /**
+     * Set all fields, auto-filling the eventID
+     */
+    public Event(String userName, String personID, float latitude, float longitude,
+                 String country, String city, String eventType, int year) {
+        this.eventID = UUID.randomUUID().toString();
+        this.userName = userName;
+        this.personID = personID;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.country = country;
+        this.city = city;
+        this.eventType = eventType;
+        this.year = year;
+    }
+
+    /**
+     * Constructor only sets ID
+     */
+    public Event() {
+        this.eventID = UUID.randomUUID().toString();
     }
 
     public String getEventID() {

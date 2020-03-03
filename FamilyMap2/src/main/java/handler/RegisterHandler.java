@@ -67,7 +67,7 @@ public class RegisterHandler implements HttpHandler {
                 exchange.getResponseBody().close();
             }
         }
-        catch (IOException e) {
+        catch (Exception e) {
             // Some kind of internal error has occurred inside the server (not the
             // client's fault), so we return an "internal server error" status code to the client.
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);

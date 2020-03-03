@@ -82,7 +82,15 @@ public class UserDao {
      * @param userName the userName to delete from the database
      * Remove the user from the database
      */
-    public void deleteUser(String userName) { }
+    public void deleteUser(String userName) throws DataAccessException {
+        String sql = "DELETE FROM Users WHERE userName = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, userName);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting from the database");
+        }
+    }
 
     /**
      * Remove the all users from the database
@@ -101,13 +109,4 @@ public class UserDao {
      * Update the user's table information
      */
     public void updateUser() { }
-
-    /**
-     * Check if a userName is valid
-     * @param userName the userName to check for validity
-     * @return if the user is valid
-     */
-    public Boolean isValidUser(String userName) {
-        return true;
-    }
 }

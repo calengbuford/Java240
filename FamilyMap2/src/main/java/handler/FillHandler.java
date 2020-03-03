@@ -2,18 +2,27 @@ package handler;
 
 import java.io.*;
 import java.net.*;
+import com.google.gson.Gson;
 import com.sun.net.httpserver.*;
+import request.FillRequest;
+import response.FillResponse;
+import service.FillService;
 
 public class FillHandler implements HttpHandler {
 
     /**
-     * Handles HTTP requests containing the "/fill" URL path
+     * Handles HTTP requests containing the "/fill/[userName]/{generations}" URL path
      * @param exchange an HttpExchange object, defined by Java
      * @throws IOException
      */
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        FillRequest request;
+        FillResponse response;
+        Gson gson = new Gson();
         boolean success = false;
+        int generations = 4;
+        String userName = "";
 
         try {
             // Determine the HTTP request type
@@ -22,25 +31,53 @@ public class FillHandler implements HttpHandler {
                 // Get the HTTP request headers
                 Headers reqHeaders = exchange.getRequestHeaders();
 
-                String respData = "";
+                // Determine url parameters
+                String url = exchange.getRequestURI().getPath();
+                String[] urlElements = url.split("/");
 
+                // Check the userName parameter
+                if (urlElements.length > 2) {
+                    userName = urlElements[2];
+                }
+                else {
+                    throw new Exception("Invalid userName");
+                }
+                // Check the optional generations generations
+                if (urlElements.length > 3) {
+                    try {
+                        generations = Integer.parseInt(urlElements[3]);
+                        if (generations < 0) {
+                            throw new Exception("Invalid generations parameter");
+                        }
+                    }
+                    catch (Exception e) {
+                        throw new Exception("Invalid generations parameter");
+                    }
+                }
 
-                // TODO: everything
+                // Extract the JSON string from the HTTP request body
 
+                // Get the request body input stream
+                InputStream reqBody = exchange.getRequestBody();
+                // Read JSON string from the input stream
+                String reqJson = readString(reqBody);
 
-                // Start sending the HTTP response to the client, starting with
-                // the status code and any defined headers.
+                // Display/log the request JSON data
+                System.out.println(reqJson);
+
+                // Call the login service and get the response
+                request = gson.fromJson(reqJson, FillRequest.class);
+                FillService service = new FillService();
+                response = service.fill(request, userName, generations);
+
+                // Convert the response to a byte array
+                String respJson = gson.toJson(response);
+                byte[] array = respJson.getBytes();
+
+                // Set the header and write the response
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-
-                // Now that the status code and headers have been sent to the client,
-                // next we send the JSON data in the HTTP response body.
-
-                // Get the response body output stream.
                 OutputStream respBody = exchange.getResponseBody();
-                // Write the JSON string to the output stream.
-                writeString(respData, respBody);
-                // Close the output stream.  This is how Java knows we are done
-                // sending data and the response is complete/
+                respBody.write(array);
                 respBody.close();
 
                 success = true;
@@ -56,7 +93,7 @@ public class FillHandler implements HttpHandler {
                 exchange.getResponseBody().close();
             }
         }
-        catch (IOException e) {
+        catch (Exception e) {
             // Some kind of internal error has occurred inside the server (not the
             // client's fault), so we return an "internal server error" status code to the client.
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
@@ -70,12 +107,20 @@ public class FillHandler implements HttpHandler {
         }
     }
 
-    /*
-        The writeString method shows how to write a String to an OutputStream.
-    */
-    private void writeString(String str, OutputStream os) throws IOException {
-        OutputStreamWriter sw = new OutputStreamWriter(os);
-        sw.write(str);
-        sw.flush();
+    /**
+     * The readString method shows how to read a String from an InputStream
+     * @param is InputStream
+     * @return string
+     * @throws IOException
+     */
+    private String readString(InputStream is) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        InputStreamReader sr = new InputStreamReader(is);
+        char[] buf = new char[1024];
+        int len;
+        while ((len = sr.read(buf)) > 0) {
+            sb.append(buf, 0, len);
+        }
+        return sb.toString();
     }
 }

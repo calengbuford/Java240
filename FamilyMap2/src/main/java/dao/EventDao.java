@@ -2,6 +2,7 @@ package dao;
 
 import model.Event;
 
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -101,7 +102,29 @@ public class EventDao {
      * Remove the event from the database
      * @param eventID the ID of the event to delete
      */
-    public void deleteEvent(String eventID) { }
+    public void deleteEventByID(String eventID) throws DataAccessException {
+        String sql = "DELETE FROM Events WHERE eventID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, eventID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting from the database");
+        }
+    }
+
+    /**
+     * Remove all events from the database associated with a userName
+     * @param userName
+     */
+    public void deleteEventByUserName(String userName) throws DataAccessException {
+        String sql = "DELETE FROM Events WHERE userName = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, userName);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while deleting from the database");
+        }
+    }
 
     /**
      * Remove the all events from the database
