@@ -30,7 +30,7 @@ public class PersonService {
 
             // Verify the AuthToken
             authTokenDao = new AuthTokenDao(conn);
-            authToken = authTokenDao.getAuthToken(request.getAuthToken().getToken());
+            authToken = authTokenDao.getAuthTokenByToken(request.getAuthToken().getToken());
             if (authToken == null) {
                 throw new Exception("AuthToken not valid");
             }

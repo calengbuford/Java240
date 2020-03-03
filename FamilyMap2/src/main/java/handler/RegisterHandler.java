@@ -54,7 +54,7 @@ public class RegisterHandler implements HttpHandler {
                 respBody.write(array);
                 respBody.close();
 
-                success = true;
+                success = response.getSuccess();
             }
 
             if (!success) {

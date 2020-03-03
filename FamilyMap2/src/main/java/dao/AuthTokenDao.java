@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AuthTokenDao {
     private final Connection conn;
@@ -42,7 +44,7 @@ public class AuthTokenDao {
      * @return the AuthToken object
      * @throws DataAccessException
      */
-    public AuthToken getAuthToken(String token) throws DataAccessException {
+    public AuthToken getAuthTokenByToken(String token) throws DataAccessException {
         AuthToken authToken;
         ResultSet rs = null;
         String sql = "SELECT * FROM AuthTokens WHERE token = ?;";
@@ -53,6 +55,44 @@ public class AuthTokenDao {
                 authToken = new AuthToken(rs.getString("token"), rs.getString("userName"),
                         rs.getString("password"));
                 return authToken;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding authToken");
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return null;
+    }
+
+    /**
+     * Get an AuthToken from the database
+     * @param userName associated with the AuthToken object
+     * @return a List of AuthToken objects
+     * @throws DataAccessException
+     */
+    public List<AuthToken> getAuthTokenByUserName(String userName) throws DataAccessException {
+        AuthToken authToken;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM AuthTokens WHERE userName = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, userName);
+            rs = stmt.executeQuery();
+            List authTokens = new ArrayList<AuthToken>();
+            while (rs.next()) {
+                authToken = new AuthToken(rs.getString("token"), rs.getString("userName"),
+                        rs.getString("password"));
+                authTokens.add(authToken);
+            }
+            if (authTokens.size() > 0) {
+                return authTokens;
             }
         } catch (SQLException e) {
             e.printStackTrace();

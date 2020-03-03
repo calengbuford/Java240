@@ -46,7 +46,7 @@ public class AuthTokenDaoTest {
             //only that it ran without causing an error
             authTokenDao.createAuthToken(bestAuthToken);
             //So lets use a find method to get the authToken that we just put in back out
-            compareTest = authTokenDao.getAuthToken(bestAuthToken.getToken());
+            compareTest = authTokenDao.getAuthTokenByToken(bestAuthToken.getToken());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
@@ -94,7 +94,7 @@ public class AuthTokenDaoTest {
             AuthTokenDao authTokenDao = new AuthTokenDao(conn);
             //and then get something back from our find. If the authToken is not in the database we
             //should have just changed our compareTest to a null object
-            compareTest = authTokenDao.getAuthToken(bestAuthToken.getToken());
+            compareTest = authTokenDao.getAuthTokenByToken(bestAuthToken.getToken());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
@@ -117,7 +117,7 @@ public class AuthTokenDaoTest {
             AuthTokenDao authTokenDao = new AuthTokenDao(conn);
             authTokenDao.createAuthToken(bestAuthToken);
 
-            compareTest = authTokenDao.getAuthToken(bestAuthToken.getToken());
+            compareTest = authTokenDao.getAuthTokenByToken(bestAuthToken.getToken());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);
@@ -141,7 +141,7 @@ public class AuthTokenDaoTest {
             AuthTokenDao authTokenDao = new AuthTokenDao(conn);
 
             // Attempt to retrieve an authToken that does not exist, since the table is empty
-            authToken = authTokenDao.getAuthToken("1234");
+            authToken = authTokenDao.getAuthTokenByToken("1234");
 
             db.closeConnection(true);
         } catch (DataAccessException e) {
@@ -167,7 +167,7 @@ public class AuthTokenDaoTest {
 
             // Delete all rows of the table, then try to get an authToken from the table
             authTokenDao.deleteAllAuthTokens();
-            compareTest = authTokenDao.getAuthToken(bestAuthToken.getToken());
+            compareTest = authTokenDao.getAuthTokenByToken(bestAuthToken.getToken());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);

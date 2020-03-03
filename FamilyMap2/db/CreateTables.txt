@@ -8,7 +8,7 @@ create table AuthTokens
 create table Events
 (
     eventID varchar(255) not null primary key,
-    userName varchar(255) not null,
+    associatedUsername varchar(255) not null,
     personID varchar(255) not null,
     latitude float not null,
     longitude float not null,
@@ -21,7 +21,7 @@ create table Events
 create table Persons
 (
     personID varchar(255) not null primary key,
-    userName varchar(255) not null,
+    associatedUsername varchar(255) not null,
     firstName varchar(255) not null,
     lastName varchar(255) not null,
     gender varchar(255) not null,

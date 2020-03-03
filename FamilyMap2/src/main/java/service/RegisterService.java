@@ -47,16 +47,20 @@ public class RegisterService {
                     request.getFirstName(), request.getLastName(), request.getGender(), UUID.randomUUID().toString());
 
             userDao = new UserDao(conn);
-            if (userDao.getUser(user.getUserName()) != null) {
-                throw new Exception("User already exists in database");
-            }
+            authTokenDao = new AuthTokenDao(conn);
 
-            // Add the user to the database
-            userDao.createUser(user);
+            if (userDao.getUser(user.getUserName()) != null) {
+                if (authTokenDao.getAuthTokenByUserName(user.getUserName()) != null) {
+                    throw new Exception("User already registered in the database");
+                }
+            }
+            else {
+                // Add the user to the database
+                userDao.createUser(user);
+            }
 
             // Create a new AuthToken for the login session
             authToken = new AuthToken(user.getUserName(), user.getPassword());
-            authTokenDao = new AuthTokenDao(conn);
             authTokenDao.createAuthToken(authToken);
 
             db.closeConnection(true);

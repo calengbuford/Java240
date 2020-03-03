@@ -1,5 +1,6 @@
 package service;
 
+import dao.AuthTokenDao;
 import dao.Database;
 import dao.UserDao;
 import model.AuthToken;
@@ -13,6 +14,7 @@ public class LoginService {
     private User user;
     private AuthToken authToken;
     private UserDao userDao;
+    private AuthTokenDao authTokenDao;
     private Database db;
     private LoginResponse response;
 
@@ -34,6 +36,7 @@ public class LoginService {
             db = new Database();
             Connection conn = db.openConnection();
             userDao = new UserDao(conn);
+            authTokenDao = new AuthTokenDao(conn);
 
             // Check if valid userName
             if (userDao.getUser(request.getUserName()) == null) {
@@ -47,6 +50,11 @@ public class LoginService {
             // Create a new AuthToken for the login session
             authToken = new AuthToken(user.getUserName(), user.getPassword());
 
+            // Create a new AuthToken for the login session
+            authToken = new AuthToken(user.getUserName(), user.getPassword());
+            authTokenDao = new AuthTokenDao(conn);
+            authTokenDao.createAuthToken(authToken);
+
             // Add AuthToken to the response
             db.closeConnection(true);
             response.setAuthToken(authToken.getToken());
@@ -56,14 +64,19 @@ public class LoginService {
             return response;
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
             try {
                 db.closeConnection(false);
             }
             catch (Exception error) {
-                System.out.println(error.toString());
+                System.out.println(error.getMessage());
             }
-            response.setMessage(e.toString());
+            if (e.getMessage() == null) {
+                response.setMessage("Internal Server Error");
+            }
+            else {
+                response.setMessage(e.getMessage());
+            }
             response.setSuccess(false);
             return response;
         }

@@ -80,14 +80,19 @@ public class LoadService {
             return response;
         }
         catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e.getMessage());
             try {
                 db.closeConnection(false);
             }
             catch (Exception error) {
-                System.out.println(error.toString());
+                System.out.println(error.getMessage());
             }
-            response.setMessage(e.toString());
+            if (e.getMessage() == null) {
+                response.setMessage("Internal Server Error");
+            }
+            else {
+                response.setMessage(e.getMessage());
+            }
             response.setSuccess(false);
             return response;
         }

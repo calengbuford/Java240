@@ -37,7 +37,7 @@ public class EventIDService {
             // Verify the AuthToken
             authTokenDao = new AuthTokenDao(conn);
             token = request.getAuthToken();
-            if (authTokenDao.getAuthToken(token.getToken()) == null) {
+            if (authTokenDao.getAuthTokenByToken(token.getToken()) == null) {
                 throw new Exception("AuthToken not valid");
             }
 

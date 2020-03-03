@@ -23,6 +23,7 @@ public class FillHandler implements HttpHandler {
         boolean success = false;
         int generations = 4;
         String userName = "";
+        boolean validParams = true;
 
         try {
             // Determine the HTTP request type
@@ -35,40 +36,50 @@ public class FillHandler implements HttpHandler {
                 String url = exchange.getRequestURI().getPath();
                 String[] urlElements = url.split("/");
 
-                // Check the userName parameter
+                response = new FillResponse();
+
+                // Check the URL parameters
                 if (urlElements.length > 2) {
                     userName = urlElements[2];
                 }
                 else {
-                    throw new Exception("Invalid userName");
+                    validParams = false;
+                    response.setMessage("Invalid userName");
+                    response.setSuccess(false);
                 }
-                // Check the optional generations generations
                 if (urlElements.length > 3) {
                     try {
                         generations = Integer.parseInt(urlElements[3]);
                         if (generations < 0) {
-                            throw new Exception("Invalid generations parameter");
+                            validParams = false;
+                            response.setMessage("Invalid generations parameter");
+                            response.setSuccess(false);
                         }
                     }
-                    catch (Exception e) {
-                        throw new Exception("Invalid generations parameter");
+                    catch (NumberFormatException e) {
+                        validParams = false;
+                        response.setMessage("Invalid generations parameter");
+                        response.setSuccess(false);
+                        System.out.println(e);
                     }
                 }
 
-                // Extract the JSON string from the HTTP request body
+                if (validParams) {
+                    // Extract the JSON string from the HTTP request body
 
-                // Get the request body input stream
-                InputStream reqBody = exchange.getRequestBody();
-                // Read JSON string from the input stream
-                String reqJson = readString(reqBody);
+                    // Get the request body input stream
+                    InputStream reqBody = exchange.getRequestBody();
+                    // Read JSON string from the input stream
+                    String reqJson = readString(reqBody);
 
-                // Display/log the request JSON data
-                System.out.println(reqJson);
+                    // Display/log the request JSON data
+                    System.out.println(reqJson);
 
-                // Call the login service and get the response
-                request = gson.fromJson(reqJson, FillRequest.class);
-                FillService service = new FillService();
-                response = service.fill(request, userName, generations);
+                    // Call the login service and get the response
+                    request = gson.fromJson(reqJson, FillRequest.class);
+                    FillService service = new FillService();
+                    response = service.fill(request, userName, generations);
+                }
 
                 // Convert the response to a byte array
                 String respJson = gson.toJson(response);
@@ -80,7 +91,7 @@ public class FillHandler implements HttpHandler {
                 respBody.write(array);
                 respBody.close();
 
-                success = true;
+                success = response.getSuccess();
             }
 
             if (!success) {

@@ -167,7 +167,7 @@ public class PersonDaoTest {
 
             // Delete all rows of the table, then try to get a person from the table
             personDao.deleteAllPersons();
-            compareTest = personDao.getPerson(bestPerson.getUserName());
+            compareTest = personDao.getPerson(bestPerson.getAssociatedUsername());
             db.closeConnection(true);
         } catch (DataAccessException e) {
             db.closeConnection(false);

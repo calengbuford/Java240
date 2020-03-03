@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class Event {
     private String eventID;
-    private String userName;
+    private String associatedUsername;
     private String personID;
     private float latitude;
     private float longitude;
@@ -16,10 +16,10 @@ public class Event {
     /**
      * Set all private fields
      */
-    public Event(String eventID, String userName, String personID, float latitude, float longitude,
+    public Event(String eventID, String associatedUsername, String personID, float latitude, float longitude,
                  String country, String city, String eventType, int year) {
         this.eventID = eventID;
-        this.userName = userName;
+        this.associatedUsername = associatedUsername;
         this.personID = personID;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -32,10 +32,10 @@ public class Event {
     /**
      * Set all fields, auto-filling the eventID
      */
-    public Event(String userName, String personID, float latitude, float longitude,
+    public Event(String associatedUsername, String personID, float latitude, float longitude,
                  String country, String city, String eventType, int year) {
         this.eventID = UUID.randomUUID().toString();
-        this.userName = userName;
+        this.associatedUsername = associatedUsername;
         this.personID = personID;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -60,12 +60,12 @@ public class Event {
         this.eventID = eventID;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getAssociatedUsername() {
+        return associatedUsername;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setAssociatedUsername(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
 
     public String getPersonID() {
@@ -136,7 +136,7 @@ public class Event {
         if (o instanceof Event) {
             Event oEvent = (Event) o;
             return oEvent.getEventID().equals(getEventID()) &&
-                    oEvent.getUserName().equals(getUserName()) &&
+                    oEvent.getAssociatedUsername().equals(getAssociatedUsername()) &&
                     oEvent.getPersonID().equals(getPersonID()) &&
                     oEvent.getLatitude() == (getLatitude()) &&
                     oEvent.getLongitude() == (getLongitude()) &&
