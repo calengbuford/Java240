@@ -33,7 +33,7 @@ public class Server {
 
         // Since the server has no "user interface", it should display "log"
         // messages containing information about its internal activities.
-        System.out.println("Initializing HTTP server.Server");
+        System.out.println("Initializing HTTP Server");
 
         try {
             // Create a new HttpServer object.

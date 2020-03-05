@@ -6,12 +6,9 @@ public class EventRequest {
     private AuthToken authToken;
 
     /**
-     * Set AuthToken
-     * @param authToken
+     * Empty constructor
      */
-    public EventRequest(AuthToken authToken) {
-        this.authToken = authToken;
-    }
+    public EventRequest() { }
 
     public AuthToken getAuthToken() {
         return authToken;

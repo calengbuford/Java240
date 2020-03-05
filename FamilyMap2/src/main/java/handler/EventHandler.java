@@ -2,7 +2,16 @@ package handler;
 
 import java.io.*;
 import java.net.*;
+
+import com.google.gson.Gson;
 import com.sun.net.httpserver.*;
+import dao.UserDao;
+import request.EventIDRequest;
+import request.EventRequest;
+import response.EventIDResponse;
+import response.EventResponse;
+import service.EventIDService;
+import service.EventService;
 
 public class EventHandler implements HttpHandler {
 
@@ -13,6 +22,9 @@ public class EventHandler implements HttpHandler {
      */
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        EventService service = new EventService();
+        EventIDService serviceID = new EventIDService();
+        Gson gson = new Gson();
         boolean success = false;
 
         try {
@@ -22,28 +34,75 @@ public class EventHandler implements HttpHandler {
                 // Get the HTTP request headers
                 Headers reqHeaders = exchange.getRequestHeaders();
 
-                String respData = "";
+                // Check to see if an "Authorization" header is present
+                if (reqHeaders.containsKey("Authorization")) {
+
+                    // Extract the auth token from the "Authorization" header
+                    String headerAuthToken = reqHeaders.getFirst("Authorization");
+
+                    // Determine url parameters
+                    String url = exchange.getRequestURI().getPath();
+                    String[] urlElements = url.split("/");
+
+                    // This will hold the JSON data we will return in the HTTP response body
+                    String respJson = "";
+
+                    if (urlElements.length == 2) {
+                        // Call event service
+                        EventResponse response;
+                        EventRequest request;
+
+                        request = new EventRequest();
+                        response = service.event(request, headerAuthToken);
+
+                        // Convert response to JSON
+                        respJson = gson.toJson(response);
+
+                        // Send the HTTP response to the client
+                        exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                        OutputStream respBody = exchange.getResponseBody();
+                        writeString(respJson, respBody);
+                        respBody.close();
+
+                        success = response.getSuccess();
 
 
-                // TODO: everything
+                    }
+                    else if (urlElements.length == 3) {
+                        EventIDResponse response;
+                        EventIDRequest request;
 
+                        request = new EventIDRequest();
+                        response = serviceID.event(request, headerAuthToken, urlElements[2]);
 
-                // Start sending the HTTP response to the client, starting with
-                // the status code and any defined headers.
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                        // Convert response to JSON
+                        respJson = gson.toJson(response);
 
-                // Now that the status code and headers have been sent to the client,
-                // next we send the JSON data in the HTTP response body.
+                        // Send the HTTP response to the client
+                        exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                        OutputStream respBody = exchange.getResponseBody();
+                        writeString(respJson, respBody);
+                        respBody.close();
 
-                // Get the response body output stream.
-                OutputStream respBody = exchange.getResponseBody();
-                // Write the JSON string to the output stream.
-                writeString(respData, respBody);
-                // Close the output stream.  This is how Java knows we are done
-                // sending data and the response is complete/
-                respBody.close();
+                        success = response.getSuccess();
+                    }
+                    else {
+                        EventResponse response = new EventResponse();
+                        response.setMessage("Error: Invalid request");
+                        response.setSuccess(false);
 
-                success = true;
+                        // Convert response to JSON
+                        respJson = gson.toJson(response);
+
+                        // Send the HTTP response to the client
+                        exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                        OutputStream respBody = exchange.getResponseBody();
+                        writeString(respJson, respBody);
+                        respBody.close();
+
+                        success = response.getSuccess();
+                    }
+                }
             }
 
             if (!success) {

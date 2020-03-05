@@ -9,6 +9,7 @@ import request.EventRequest;
 import response.EventResponse;
 
 import java.sql.Connection;
+import java.util.List;
 
 public class EventService {
     private AuthTokenDao authTokenDao;
@@ -22,7 +23,7 @@ public class EventService {
         response = new EventResponse();
     }
 
-    private EventResponse event(EventRequest request) throws Exception {
+    public EventResponse event(EventRequest request, String headerAuthToken) {
         try {
             // Connect and make a new Dao
             db = new Database();
@@ -30,7 +31,7 @@ public class EventService {
 
             // Verify the AuthToken
             authTokenDao = new AuthTokenDao(conn);
-            authToken = authTokenDao.getAuthTokenByToken(request.getAuthToken().getToken());
+            authToken = authTokenDao.getAuthTokenByToken(headerAuthToken);
             if (authToken == null) {
                 throw new Exception("AuthToken not valid");
             }
@@ -47,9 +48,19 @@ public class EventService {
             return response;
         }
         catch (Exception e) {
-            System.out.println("Internal server.Server Error\n" + e);
-            db.closeConnection(false);
-            response.setMessage(e.toString());
+            System.out.println("Internal Server Error\n" + e);
+            try {
+                db.closeConnection(false);
+            }
+            catch (Exception error) {
+                System.out.println("Error: " + error.getMessage());
+            }
+            if (e.getMessage() == null) {
+                response.setMessage("Internal Server Error");
+            }
+            else {
+                response.setMessage("Error: " + e.getMessage());
+            }
             response.setSuccess(false);
             return response;
         }

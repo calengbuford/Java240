@@ -1,11 +1,12 @@
 package dao;
 
 import model.Event;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventDao {
     private final Connection conn;
@@ -85,15 +86,47 @@ public class EventDao {
     }
 
     /**
-     * Recursively get all events of user with userName
+     * Recursively get all events of user with associatedUsername
      * @param associatedUsername
      * @return Event array of all events of the user
      * @throws DataAccessException
      */
     public Event[] getPersonEvents(String associatedUsername) throws DataAccessException {
+        Event event;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM Events WHERE associatedUsername = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, associatedUsername);
+            rs = stmt.executeQuery();
+            List<Event> eventsList = new ArrayList<Event>();
 
+            while (rs.next()) {
+                event = new Event(rs.getString("eventID"), rs.getString("associatedUsername"),
+                        rs.getString("personID"), rs.getFloat("latitude"), rs.getFloat("longitude"),
+                        rs.getString("country"), rs.getString("city"), rs.getString("eventType"),
+                        rs.getInt("year"));
+                eventsList.add(event);
+            }
+            if (eventsList.size() > 0) {
+                Event[] events = new Event[eventsList.size()];
+                for (int i = 0; i < eventsList.size(); i++) {
+                    events[i] = eventsList.get(i);
+                }
+                return events;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding event");
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
 
-
+        }
         return null;
     }
 

@@ -64,7 +64,6 @@ public class FillService {
      * to be generated, and must be a non-negative integer (the default is 4, which results in 31 new
      * persons each with associated events).
      * @param request FillRequest
-     * @param urlElements to be parsed
      * @param userName the userName for the user to be filled
      * @param generations the number of generations to fill
      * @return FillResponse object as response from fill
@@ -83,6 +82,10 @@ public class FillService {
             // Get the user from the database
             this.userName = userName;
             User user = userDao.getUser(userName);
+            if (user == null) {
+                throw new Exception("Invalid userName");
+            }
+            this.personID = user.getPersonID();
 
             // Delete any information already associated with the user
             if (userDao.getUser(userName) != null) {

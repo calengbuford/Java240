@@ -15,7 +15,8 @@ public class PersonIDService {
     private PersonDao personDao;
     private Database db;
     private PersonIDResponse response;
-    private AuthToken token;
+    private Person person;
+    private AuthToken authToken;
 
     /**
      * Empty constructor
@@ -29,7 +30,7 @@ public class PersonIDService {
      * @return PersonResponse object as response
      * @throws Exception
      */
-    public PersonIDResponse person(PersonIDRequest request, String personID) throws Exception {
+    public PersonIDResponse person(PersonIDRequest request, String headerAuthToken, String personID) {
         try {
             // Connect and make a new Dao
             db = new Database();
@@ -37,24 +38,36 @@ public class PersonIDService {
 
             // Verify the AuthToken
             authTokenDao = new AuthTokenDao(conn);
-            token = request.getAuthToken();
-            if (authTokenDao.getAuthTokenByToken(token.getToken()) == null) {
+            authToken = authTokenDao.getAuthTokenByToken(headerAuthToken);
+            if (authToken == null) {
                 throw new Exception("AuthToken not valid");
             }
 
-            // Get person with personID from database
             personDao = new PersonDao(conn);
-            Person person = personDao.getPerson(personID);
+            person = personDao.getPerson(personID);
 
+            if (person == null) {
+                throw new Exception("EventID not valid");
+            }
             db.closeConnection(true);
             response.setPerson(person);
             response.setSuccess(true);
             return response;
         }
         catch (Exception e) {
-            System.out.println("Internal server.Server Error\n" + e);
-            db.closeConnection(false);
-            response.setMessage(e.toString());
+            System.out.println("Internal Server Error\n" + e);
+            try {
+                db.closeConnection(false);
+            }
+            catch (Exception error) {
+                System.out.println("Error: " + error.getMessage());
+            }
+            if (e.getMessage() == null) {
+                response.setMessage("Internal Server Error");
+            }
+            else {
+                response.setMessage("Error: " + e.getMessage());
+            }
             response.setSuccess(false);
             return response;
         }

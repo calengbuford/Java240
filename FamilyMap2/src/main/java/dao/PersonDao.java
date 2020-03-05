@@ -1,11 +1,14 @@
 package dao;
 
+import model.Event;
 import model.Person;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PersonDao {
     private final Connection conn;
@@ -80,15 +83,46 @@ public class PersonDao {
 
 
     /**
-     * Recursively get all family members of user with userName
+     * Recursively get all family members of user with associatedUsername
      * @param associatedUsername
-     * @return Person array of all people in the userName's family
+     * @return Person array of all people in the associatedUsername's family
      * @throws DataAccessException
      */
     public Person[] getPersonFamily(String associatedUsername) throws DataAccessException {
+        Person person;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM Persons WHERE associatedUsername = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, associatedUsername);
+            rs = stmt.executeQuery();
+            List<Person> personsList = new ArrayList<Person>();
+            while (rs.next()) {
+                person = new Person(rs.getString("personID"), rs.getString("associatedUsername"),
+                        rs.getString("firstName"), rs.getString("lastName"),
+                        rs.getString("gender"), rs.getString("fatherID"),
+                        rs.getString("motherID"), rs.getString("spouseID"));
+                personsList.add(person);
+            }
+            if (personsList.size() > 0) {
+                Person[] persons = new Person[personsList.size()];
+                for (int i = 0; i < personsList.size(); i++) {
+                    persons[i] = personsList.get(i);
+                }
+                return persons;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding person");
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
 
-
-
+        }
         return null;
     }
 

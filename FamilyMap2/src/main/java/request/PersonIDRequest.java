@@ -6,12 +6,9 @@ public class PersonIDRequest {
     private AuthToken authToken;
 
     /**
-     * Set AuthToken
-     * @param authToken
+     * Empty constructor
      */
-    public PersonIDRequest(AuthToken authToken) {
-        this.authToken = authToken;
-    }
+    public PersonIDRequest() { }
 
     public AuthToken getAuthToken() {
         return authToken;
