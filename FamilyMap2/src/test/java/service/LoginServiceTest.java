@@ -1,13 +1,16 @@
 package service;
 
-import model.User;
+import model_.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import request.ClearRequest;
-import request.LoginRequest;
-import request.RegisterRequest;
-import response.LoginResponse;
+import request_.ClearRequest;
+import request_.LoginRequest;
+import request_.RegisterRequest;
+import response_.LoginResponse;
+import service_.ClearService;
+import service_.LoginService;
+import service_.RegisterService;
 
 import static org.junit.jupiter.api.Assertions.*;
 

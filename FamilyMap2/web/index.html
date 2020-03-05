@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title> Family Map app server </title>
+        <title> Family Map app server_ </title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -40,12 +40,12 @@
                 var obj = new XMLHttpRequest();
                 obj.onreadystatechange = function()
                 {
-                    var response = obj.responseText;
-                    var responseJson = JSON.parse(response);
+                    var response_ = obj.responseText;
+                    var responseJson = JSON.parse(response_);
                     if (responseJson.authToken) {
                         document.getElementById("authToken").value = responseJson.authToken;
                     }
-                    document.getElementById("response").value = formatJson(response);
+                    document.getElementById("response_").value = formatJson(response_);
                 };
                 obj.open(method,path,false);
                 obj.setRequestHeader("Content-Type", "application/json");
@@ -162,7 +162,7 @@
     <body>
         <div style="text-align:center;">
             <h1>
-                This is the Family Map server used to power the Family Map Android app.
+                This is the Family Map server_ used to power the Family Map Android app.
             </h1>
             <h2>Built to power BYU CS 240 Family Map Application for Android</h2>
         </div>
@@ -170,40 +170,40 @@
             <h4>The web API that will be used is described below. Some of the APIs require a request body
                  to be sent (namely "/user/login" and "/user/register"), while others require an Authorization authToken (received at login).
                 To view the JSON format required for "/user/login" and "/user/register" simply click on the link below and look in the request body.
-                To try out an API, click on its link below. It will fill the boxes below with the data to be sent with the request.
-                Edit the data as needed and click Submit.</h4>
+                To try out an API, click on its link below. It will fill the boxes below with the data_ to be sent with the request.
+                Edit the data_ as needed and click Submit.</h4>
 
                 <!-- Commands for the Database -->
               <div style="border: 2px solid black;">
                 <h1 style="padding-left:1cm; text-decoration: underline;">Database Commands</h1>
                 <ul>
                     <li>
-                      <a href="javascript:clear()" >/clear/</a> This API will clear ALL data from the database,
-                        including users and all generated data. This API can be run from a browser by simply
+                      <a href="javascript:clear()" >/clear/</a> This API will clear ALL data_ from the database,
+                        including users and all generated data_. This API can be run from a browser by simply
                         typing it in the address bar or by clicking this link followed by pressing the Submit button below.
                         No authorization authToken is required.
                     </li>
                     <li>
-                      <a href="javascript:load()">/load/</a> This API will load the server&apos;s database with
-                        data provided by json text in the response body. The json text must contain an array of users as
+                      <a href="javascript:load()">/load/</a> This API will load the server_&apos;s database with
+                        data_ provided by json text in the response_ body. The json text must contain an array of users as
                         defined in the register details in addition to a personID, an array of persons, and an array of events.
-                        WARNING: all data from the database is wiped when this is called. The json file will be specified in
-                        the body of the request. A example.json file is provided to get you started with loading specific data.
+                        WARNING: all data_ from the database is wiped when this is called. The json file will be specified in
+                        the body of the request. A example.json file is provided to get you started with loading specific data_.
                         No authorization authToken is required.
                     </li>
                     <li>
-                      <a href="javascript:fill()" >/fill/[username]</a> This API will fill the server&apos;s
-                        database with fake data for the specified user name. The "username" parameter is required
-                        and must be a user already registered with the server. It can be any user name you choose.
-                        If there is any data in the database associated with the given user name, it is erased.
+                      <a href="javascript:fill()" >/fill/[username]</a> This API will fill the server_&apos;s
+                        database with fake data_ for the specified user name. The "username" parameter is required
+                        and must be a user already registered with the server_. It can be any user name you choose.
+                        If there is any data_ in the database associated with the given user name, it is erased.
                         This API can be run from a browser by simply typing it in the address bar (or by pressing
                         the link, filling in the details, and clicking submit). The base person generated should be a
                         person representing the user.
                         No authorization authToken is required.</li>
                     <li>
                       <a href="javascript:fill(true)" >/fill/[username]/{generations}</a> This API will fill the
-                        server&apos;s database with fake data for the specified user name. The "username" parameter
-                        is required and must be a user already registered with the server. All the ancestor data
+                        server_&apos;s database with fake data_ for the specified user name. The "username" parameter
+                        is required and must be a user already registered with the server_. All the ancestor data_
                         associated with this user is erased. This API can be run from a browser by simply
                         typing it in the address bar (or by pressing the link, filling in the details, and clicking submit).
                         The base person generated should be a person representing the user.
@@ -235,7 +235,7 @@
                     <a href="javascript:getAllEvents()">/event/</a> This API will return ALL events for ALL
                       family members of the current user. The current user is determined from the provided
                       authorization authToken (which is required for this call). The returned JSON object contains
-                      "data" which is an array of event objects.
+                      "data_" which is an array of event objects.
                       Authorization authToken is required.
                   </li>
                   <li>
@@ -248,7 +248,7 @@
                     <a href="javascript:getAllPersons()" >/person/</a> This API will return ALL people
                       associated with the current user. The current user is determined from the provided a
                       uthorization authToken (which is required for this call). The returned JSON object contains
-                      "data" which is an array of person objects.
+                      "data_" which is an array of person objects.
                       Authorization authToken is required.
                   </li>
                   <li>
@@ -265,7 +265,7 @@
                 A few notes:
                 <ul>
                     <li>
-                        The authorization authToken is returned from the server in the "Authorization"
+                        The authorization authToken is returned from the server_ in the "Authorization"
                         attribute of the JSON object returned by the "/user/register" and "/user/login" APIs.
                         The authorization authToken must be placed in the "Authorization" header
                         on all subsequent HTTP requests.
@@ -273,7 +273,7 @@
                     <li>
                         If something fails, the returned JSON object contains a "message" attribute
                         which contains a message describing what happened.
-                        Watch for these as they will give helpful insight into why the server did not
+                        Watch for these as they will give helpful insight into why the server_ did not
                         work as expected.
                     </li>
                 </ul>
@@ -296,7 +296,7 @@
           </div>
           <p class="w3-col w3-container center" style="width:3%"></p>
           <div class="w3-col w3-container bottom" style="width:45%">
-            Response From the server: <textarea id="response" class="responseBody" readonly></textarea>
+            Response From the server_: <textarea id="response_" class="responseBody" readonly></textarea>
           <div>
           <p class="w3-col w3-container center" style="width:3%"></p>
         </div>

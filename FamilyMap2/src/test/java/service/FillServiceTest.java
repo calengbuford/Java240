@@ -1,20 +1,21 @@
 package service;
 
-import dao.AuthTokenDao;
-import dao.DataAccessException;
-import dao.Database;
-import dao.UserDao;
-import model.Person;
-import model.User;
+import dao_.AuthTokenDao;
+import dao_.DataAccessException;
+import dao_.Database;
+import model_.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import request.*;
-import response.EventResponse;
-import response.FillResponse;
-import response.PersonResponse;
+import request_.ClearRequest;
+import request_.EventRequest;
+import request_.FillRequest;
+import request_.PersonRequest;
+import response_.EventResponse;
+import response_.FillResponse;
+import response_.PersonResponse;
+import service_.*;
 
-import java.security.spec.ECField;
 import java.sql.Connection;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +29,7 @@ public class FillServiceTest {
         Database db = new Database();
 
         // Register a user to be logged in
-        RegisterRequest request = new RegisterRequest("user", "pass", "email",
+        request_.RegisterRequest request = new request_.RegisterRequest("user", "pass", "email",
                 "jimmy", "spoon", "m");
         RegisterService service = new RegisterService();
         service.register(request);
@@ -62,7 +63,7 @@ public class FillServiceTest {
     public void fillZeroGenPass() throws Exception {
         FillResponse response;
         FillService service = new FillService();
-        FillRequest request = new FillRequest();
+        request_.FillRequest request = new request_.FillRequest();
 
         response = service.fill(request, user.getUserName(), "0");
 
@@ -91,7 +92,7 @@ public class FillServiceTest {
     public void fillOneGenPass() throws Exception {
         FillResponse response;
         FillService service = new FillService();
-        FillRequest request = new FillRequest();
+        request_.FillRequest request = new request_.FillRequest();
 
         response = service.fill(request, user.getUserName(), "1");
 
@@ -120,7 +121,7 @@ public class FillServiceTest {
     public void fillTwoGenPass() throws Exception {
         FillResponse response;
         FillService service = new FillService();
-        FillRequest request = new FillRequest();
+        request_.FillRequest request = new request_.FillRequest();
 
         response = service.fill(request, user.getUserName(), "2");
 
@@ -149,7 +150,7 @@ public class FillServiceTest {
     public void fillThreeGenPass() throws Exception {
         FillResponse response;
         FillService service = new FillService();
-        FillRequest request = new FillRequest();
+        request_.FillRequest request = new request_.FillRequest();
 
         response = service.fill(request, user.getUserName(), "3");
 
@@ -178,7 +179,7 @@ public class FillServiceTest {
     public void fillFourGenPass() throws Exception {
         FillResponse response;
         FillService service = new FillService();
-        FillRequest request = new FillRequest();
+        request_.FillRequest request = new request_.FillRequest();
 
         response = service.fill(request, user.getUserName(), "4");
 
@@ -221,7 +222,7 @@ public class FillServiceTest {
         // Fill with a userName not registered
         FillResponse response;
         FillService service = new FillService();
-        FillRequest request = new FillRequest();
+        request_.FillRequest request = new request_.FillRequest();
 
         response = service.fill(request, "otherUser", "4");
 
@@ -264,7 +265,7 @@ public class FillServiceTest {
         // Fill with a userName not registered
         FillResponse response;
         FillService service = new FillService();
-        FillRequest request = new FillRequest();
+        request_.FillRequest request = new request_.FillRequest();
 
         response = service.fill(request, user.getUserName(), "-1");
 
@@ -307,7 +308,7 @@ public class FillServiceTest {
         // Fill with a userName not registered
         FillResponse response;
         FillService service = new FillService();
-        FillRequest request = new FillRequest();
+        request_.FillRequest request = new FillRequest();
 
         response = service.fill(request, user.getUserName(), "badGen");
 

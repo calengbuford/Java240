@@ -1,16 +1,19 @@
 package service;
 
-import dao.*;
-import model.Event;
-import model.Person;
-import model.User;
+import dao_.*;
+import model_.Event;
+import model_.Person;
+import model_.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import request.ClearRequest;
-import request.LoadRequest;
-import request.RegisterRequest;
-import response.LoadResponse;
+import request_.ClearRequest;
+import request_.LoadRequest;
+import request_.RegisterRequest;
+import response_.LoadResponse;
+import service_.ClearService;
+import service_.LoadService;
+import service_.RegisterService;
 
 import java.sql.Connection;
 

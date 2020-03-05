@@ -3,11 +3,14 @@ package service;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import request.ClearRequest;
-import request.PersonIDRequest;
-import request.RegisterRequest;
-import response.PersonIDResponse;
-import response.RegisterResponse;
+import request_.ClearRequest;
+import request_.PersonIDRequest;
+import request_.RegisterRequest;
+import response_.PersonIDResponse;
+import response_.RegisterResponse;
+import service_.ClearService;
+import service_.PersonIDService;
+import service_.RegisterService;
 
 import static org.junit.jupiter.api.Assertions.*;
 

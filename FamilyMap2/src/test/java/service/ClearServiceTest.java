@@ -1,14 +1,16 @@
 package service;
 
-import dao.DataAccessException;
-import dao.Database;
-import dao.EventDao;
-import model.Event;
-import model.User;
+import dao_.DataAccessException;
+import dao_.Database;
+import dao_.EventDao;
+import model_.Event;
+import model_.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import request.ClearRequest;
-import request.RegisterRequest;
+import request_.ClearRequest;
+import request_.RegisterRequest;
+import service_.ClearService;
+import service_.RegisterService;
 
 import java.sql.Connection;
 
