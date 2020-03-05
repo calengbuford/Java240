@@ -41,9 +41,13 @@ public class RegisterService {
             Connection conn = db.openConnection();
 
             // Check request parameters
-            if (request.getUserName().isEmpty() ||  request.getPassword().isEmpty() || request.getEmail().isEmpty() ||
-                    request.getFirstName().isEmpty() || request.getLastName().isEmpty() ||
+            if (request.getUserName() == null||  request.getPassword() == null || request.getEmail() == null ||
+                    request.getFirstName() == null || request.getLastName() == null ||
                     (!"f".equals(request.getGender()) && !"m".equals(request.getGender()))) {
+                throw new Exception("Invalid request value");
+            }
+            if (request.getUserName().isEmpty() ||  request.getPassword().isEmpty() || request.getEmail().isEmpty() ||
+                    request.getFirstName().isEmpty() || request.getLastName().isEmpty()) {
                 throw new Exception("Invalid request value");
             }
 
@@ -73,7 +77,7 @@ public class RegisterService {
             // Fill the user with random information
             FillService fillService = new FillService();
             FillRequest fillRequest = new FillRequest();
-            int generations = 4;
+            String generations = "4";
             FillResponse fillResponse = fillService.fill(fillRequest, user.getUserName(), generations);
 
             if (!fillResponse.getSuccess()) {

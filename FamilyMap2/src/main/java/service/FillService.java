@@ -69,7 +69,7 @@ public class FillService {
      * @return FillResponse object as response from fill
      * @throws Exception
      */
-    public FillResponse fill(FillRequest request, String userName, int generations) {
+    public FillResponse fill(FillRequest request, String userName, String generationsString) {
         // Check if any information is already associated with userName
         try {
             // Connect and make a new Dao
@@ -78,6 +78,18 @@ public class FillService {
             UserDao userDao = new UserDao(conn);
             eventDao = new EventDao(conn);
             personDao = new PersonDao(conn);
+            int generations = 4;
+
+            // Check generations parameter
+            try {
+                generations = Integer.parseInt(generationsString);
+                if (generations < 0) {
+                    throw new Exception("Invalid generations parameter");
+                }
+            }
+            catch (NumberFormatException e) {
+                throw new Exception("Invalid generations parameter");
+            }
 
             // Get the user from the database
             this.userName = userName;
@@ -108,18 +120,18 @@ public class FillService {
             return response;
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             try {
                 db.closeConnection(false);
             }
             catch (Exception error) {
-                System.out.println((error.getMessage()));
+                System.out.println(("Error: " + error.getMessage()));
             }
             if (e.getMessage() == null) {
                 response.setMessage("Internal Server Error");
             }
             else {
-                response.setMessage(e.getMessage());
+                response.setMessage("Error: " + e.getMessage());
             }
             response.setSuccess(false);
             return response;
@@ -173,10 +185,6 @@ public class FillService {
         // Create events
 
         Location loc;
-        float latitude;
-        float longitude;
-        String country;
-        String city;
 
         // Create birth events for mother and father: 18-22 years before children born
 

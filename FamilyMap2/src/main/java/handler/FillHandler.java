@@ -21,7 +21,8 @@ public class FillHandler implements HttpHandler {
         FillResponse response;
         Gson gson = new Gson();
         boolean success = false;
-        int generations = 4;
+//        int generations = 4;
+        String generations = "4";
         String userName = "";
         boolean validParams = true;
 
@@ -44,24 +45,25 @@ public class FillHandler implements HttpHandler {
                 }
                 else {
                     validParams = false;
-                    response.setMessage("Invalid userName");
+                    response.setMessage("Error: Invalid userName");
                     response.setSuccess(false);
                 }
                 if (urlElements.length > 3) {
-                    try {
-                        generations = Integer.parseInt(urlElements[3]);
-                        if (generations < 0) {
-                            validParams = false;
-                            response.setMessage("Invalid generations parameter");
-                            response.setSuccess(false);
-                        }
-                    }
-                    catch (NumberFormatException e) {
-                        validParams = false;
-                        response.setMessage("Invalid generations parameter");
-                        response.setSuccess(false);
-                        System.out.println(e);
-                    }
+                    generations = urlElements[3];
+//                    try {
+//                        generations = Integer.parseInt(urlElements[3]);
+//                        if (generations < 0) {
+//                            validParams = false;
+//                            response.setMessage("Error: Invalid generations parameter");
+//                            response.setSuccess(false);
+//                        }
+//                    }
+//                    catch (NumberFormatException e) {
+//                        validParams = false;
+//                        response.setMessage("Error: Invalid generations parameter");
+//                        response.setSuccess(false);
+//                        System.out.println(e);
+//                    }
                 }
 
                 if (validParams) {
