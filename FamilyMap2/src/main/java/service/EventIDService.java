@@ -48,8 +48,15 @@ public class EventIDService {
             if (event == null) {
                 throw new Exception("EventID not valid");
             }
+
+            // Check that the event belongs to this user
+            String userName = authToken.getUserName();
+            if (!event.getAssociatedUsername().equals(userName)) {
+                throw new Exception("Requested event does not belong to this user");
+            }
+
             db.closeConnection(true);
-            response.setEvent(event);
+            response.setEventFields(event);
             response.setSuccess(true);
             return response;
         }

@@ -47,10 +47,17 @@ public class PersonIDService {
             person = personDao.getPerson(personID);
 
             if (person == null) {
-                throw new Exception("EventID not valid");
+                throw new Exception("PersonID not valid");
             }
+
+            // Check that the person belongs to this user
+            String userName = authToken.getUserName();
+            if (!person.getAssociatedUsername().equals(userName)) {
+                throw new Exception("Requested person does not belong to this user");
+            }
+
             db.closeConnection(true);
-            response.setPerson(person);
+            response.setPersonFields(person);
             response.setSuccess(true);
             return response;
         }

@@ -54,20 +54,25 @@ public class LoadService {
             personDao.deleteAllPersons();
             userDao.deleteAllUsers();
 
-            // Add the events to the database
             Event[] events = request.getEvents();
+            Person[] persons = request.getPersons();
+            User[] users = request.getUsers();
+
+            if (events == null || persons == null || users == null) {
+                throw new Exception("Missing values");
+            }
+
+            // Add the events to the database
             for (Event event : events) {
                 eventDao.createEvent(event);
                 numEventsAdded++;
             }
             // Add the persons to the database
-            Person[] persons = request.getPersons();
             for (Person person : persons) {
                 personDao.createPerson(person);
                 numPersonsAdded++;
             }
             // Add the users to the database
-            User[] users = request.getUsers();
             for (User user : users) {
                 userDao.createUser(user);
                 numUsersAdded++;
