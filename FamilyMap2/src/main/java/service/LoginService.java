@@ -38,17 +38,23 @@ public class LoginService {
             userDao = new UserDao(conn);
             authTokenDao = new AuthTokenDao(conn);
 
+            // Check request parameters
+            if (request.getUserName().isEmpty() ||  request.getPassword().isEmpty()) {
+                throw new Exception("Invalid request value");
+            }
+
             // Check if valid userName
             if (userDao.getUser(request.getUserName()) == null) {
-                throw new Exception("Invalid userName");
+                throw new Exception("Invalid userName or password");
             }
 
             // Get the user from the database
             user = new User();
             user = userDao.getUser(request.getUserName());
 
-            // Create a new AuthToken for the login session
-            authToken = new AuthToken(user.getUserName(), user.getPassword());
+            if (!user.getPassword().equals(request.getPassword())) {
+                throw new Exception("Invalid userName or password");
+            }
 
             // Create a new AuthToken for the login session
             authToken = new AuthToken(user.getUserName(), user.getPassword());
@@ -64,18 +70,18 @@ public class LoginService {
             return response;
         }
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             try {
                 db.closeConnection(false);
             }
             catch (Exception error) {
-                System.out.println(error.getMessage());
+                System.out.println("Error: " + error.getMessage());
             }
             if (e.getMessage() == null) {
                 response.setMessage("Internal Server Error");
             }
             else {
-                response.setMessage(e.getMessage());
+                response.setMessage("Error: " + e.getMessage());
             }
             response.setSuccess(false);
             return response;
