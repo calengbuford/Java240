@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -105,7 +106,7 @@ public class AuthTokenDaoTest {
     }
 
     @Test
-    public void getAuthTokenPass() throws Exception {
+    public void getAuthTokenByTokenPass() throws Exception {
         // Make sure getAuthToken works
         // First create a AuthToken set to null. Use this to make sure what we put
         // in the database is actually there.
@@ -132,7 +133,44 @@ public class AuthTokenDaoTest {
     }
 
     @Test
-    public void getAuthTokenFail() throws Exception {
+    public void getAuthTokenByUserNamePass() throws Exception {
+        List<AuthToken> compareTest = null;
+
+        try {
+            // Get our connection and make a new Dao
+            Connection conn = db.openConnection();
+            AuthTokenDao authTokenDao = new AuthTokenDao(conn);
+            authTokenDao.createAuthToken(bestAuthToken);
+
+            compareTest = authTokenDao.getAuthTokenByUserName(bestAuthToken.getUserName());
+            db.closeConnection(true);
+        } catch (DataAccessException e) {
+            db.closeConnection(false);
+        }
+        assertNotNull(compareTest);
+        assertEquals(bestAuthToken, compareTest.get(0));
+    }
+
+    @Test
+    public void getAuthTokenByUserNameFail() throws Exception {
+        List<AuthToken> compareTest = null;
+
+        try {
+            // Get our connection and make a new Dao
+            Connection conn = db.openConnection();
+            AuthTokenDao authTokenDao = new AuthTokenDao(conn);
+            authTokenDao.createAuthToken(bestAuthToken);
+
+            compareTest = authTokenDao.getAuthTokenByUserName("badUserName");
+            db.closeConnection(true);
+        } catch (DataAccessException e) {
+            db.closeConnection(false);
+        }
+        assertNull(compareTest);
+    }
+
+    @Test
+    public void getAuthTokenByTokenFail() throws Exception {
         // Test again but try to make it fail
 
         AuthToken authToken = null;

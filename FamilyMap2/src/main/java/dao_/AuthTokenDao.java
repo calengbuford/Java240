@@ -111,20 +111,6 @@ public class AuthTokenDao {
     }
 
     /**
-     * Remove the authToken from the database
-     * @param userName the name of the user from which to delete the authToken
-     */
-    public void deleteAuthToken(String userName) throws DataAccessException {
-        String sql = "DELETE FROM AuthTokens WHERE userName = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, userName);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new DataAccessException("Error encountered while deleting from the database");
-        }
-    }
-
-    /**
      * Remove the all authTokens from the database
      * @throws DataAccessException
      */
@@ -137,8 +123,4 @@ public class AuthTokenDao {
         }
     }
 
-    /**
-     * Update the authToken's table information
-     */
-    public void updateAuthToken() { }
 }

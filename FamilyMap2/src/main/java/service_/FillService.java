@@ -65,7 +65,7 @@ public class FillService {
      * persons each with associated events).
      * @param request FillRequest
      * @param userName the userName for the user to be filled
-     * @param generations the number of generations to fill
+     * @param generationsString the number of generations to fill as a string
      * @return FillResponse object as response from fill
      * @throws Exception
      */
